@@ -81,7 +81,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- Header Section ---
-st.markdown('<p class="brand-text">يارب ننجح و نقفل</p>', unsafe_allow_html=True)
+st.markdown('<p class="brand-text"> {اللهم إني أسألك فهم النبيين وحفظ المرسلين والملائكة المقربين} يارب ننجح و نقفل</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-brand">SPRING 2026 FINALS // PORTAL</p>', unsafe_allow_html=True)
 
 # --- Centralized Search ---
