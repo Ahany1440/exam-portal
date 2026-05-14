@@ -12,20 +12,33 @@ st.markdown("""
     .stApp { background-color: #0B0E14; }
     
     /* Branding */
-    .brand-text {
-        color: #3B82F6;
+    .header-container {
         text-align: center;
+        margin-bottom: 40px;
+    }
+    .main-title {
+        color: #3B82F6;
         font-family: 'Inter', sans-serif;
-        font-size: 42px;
+        font-size: 38px;
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }
+    .arabic-dua {
+        color: #E5E7EB;
+        font-family: 'Inter', sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.6;
+        direction: rtl;
+        margin: 0 auto;
+        max-width: 80%;
     }
     .sub-brand {
-        text-align: center;
         color: #4f5b85;
-        font-size: 14px;
+        font-size: 12px;
         letter-spacing: 2px;
-        margin-bottom: 40px;
+        margin-top: 15px;
         font-family: 'Inter', sans-serif;
     }
 
@@ -80,9 +93,14 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- Header Section ---
-st.markdown('<p class="brand-text"> {اللهم إني أسألك فهم النبيين وحفظ المرسلين والملائكة المقربين} Exam Schedule</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-brand">SPRING 2026 FINALS // PORTAL</p>', unsafe_allow_html=True)
+# --- Header Section (Modified for your request) ---
+st.markdown("""
+    <div class="header-container">
+        <p class="main-title">EXAM SCHEDULE</p>
+        <p class="arabic-dua">اللهم إني أسألك فهم النبيين وحفظ المرسلين والملائكة المقربين</p>
+        <p class="sub-brand">SPRING 2026 FINALS // PORTAL</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- Centralized Search ---
 query = st.text_input("", placeholder="Enter Student ID", label_visibility="collapsed")
@@ -98,7 +116,7 @@ if query:
         hits = [e for e in data if query in str(e.get("Students Sets", ""))]
         
         if hits:
-            st.markdown(f"<p style='color: #3B82F6; font-weight: bold; font-family: Inter;'>DATA RETRIEVED FOR ID: {query}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color: #3B82F6; font-weight: bold; font-family: Inter; text-align: center;'>DATA RETRIEVED FOR ID: {query}</p>", unsafe_allow_html=True)
             for exam in hits:
                 st.markdown(f"""
                     <div class="exam-card">
