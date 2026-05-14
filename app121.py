@@ -5,12 +5,11 @@ import os
 # --- Page Config ---
 st.set_page_config(page_title="Eclipse // Exam Intel", layout="centered")
 
-# --- Custom CSS for Perfect Centering ---
+# --- Custom CSS for Perfect Centering & Form Styling ---
 st.markdown("""
     <style>
     .stApp { background-color: #0B0E14; }
     
-    /* Perfect Center Header Wrapper */
     .header-wrapper {
         display: flex;
         flex-direction: column;
@@ -19,13 +18,12 @@ st.markdown("""
         text-align: center;
         width: 100%;
         margin-bottom: 40px;
-        padding-top: 20px;
     }
 
     .main-title {
         color: #3B82F6;
         font-family: 'Inter', sans-serif;
-        font-size: clamp(28px, 5vw, 42px); /* Responsive font size */
+        font-size: clamp(28px, 5vw, 42px);
         font-weight: bold;
         margin: 0;
         text-transform: uppercase;
@@ -43,30 +41,42 @@ st.markdown("""
         max-width: 90%;
     }
 
-    .sub-brand {
-        color: #4f5b85;
-        font-size: 11px;
-        letter-spacing: 3px;
-        margin-top: 20px;
-        text-transform: uppercase;
+    /* Form and Button Styling */
+    .stForm {
+        border: none !important;
+        padding: 0 !important;
     }
-
-    /* Input Box Centering */
+    
     div[data-baseweb="input"] {
         background-color: #1C212B !important;
         border-radius: 12px !important;
         border: 1px solid #2D333F !important;
-        max-width: 500px;
-        margin: 0 auto !important;
     }
     
     input {
         color: #E5E7EB !important;
-        font-size: 16px !important;
         text-align: center !important;
     }
 
-    /* Result Card Styling */
+    /* Custom Button Styling */
+    .stButton > button {
+        width: 100%;
+        background-color: #3B82F6 !important;
+        color: white !important;
+        border-radius: 12px !important;
+        border: none !important;
+        height: 50px;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.3s;
+    }
+    
+    .stButton > button:hover {
+        background-color: #2563EB !important;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+
     .exam-card {
         background-color: #151921;
         padding: 25px;
@@ -91,30 +101,29 @@ st.markdown("""
         margin-top: 10px;
     }
     
-    /* UI Cleanup */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
-# --- Updated Centered Header ---
+# --- Header ---
 st.markdown("""
     <div class="header-wrapper">
         <div class="main-title">Exam Schedule</div>
         <div class="arabic-dua">اللهم إني أسألك فهم النبيين وحفظ المرسلين والملائكة المقربين</div>
-        <div class="sub-brand">Spring 2026 Finals // Portal</div>
     </div>
     """, unsafe_allow_html=True)
 
-# --- Search Section ---
-# Using a container to ensure the input itself stays centered
-query = st.text_input("", placeholder="Enter Student ID", label_visibility="collapsed")
+# --- The Search Form (Removes "Press Enter to apply") ---
+with st.form("search_form", clear_on_submit=False):
+    query = st.text_input("", placeholder="Enter Student ID", label_visibility="collapsed")
+    submit = st.form_submit_button("Find My Schedule")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# --- Search Logic ---
-if query:
+# --- Logic ---
+if submit and query:
     if os.path.exists("finals2026.json"):
         with open("finals2026.json", "r") as f:
             data = json.load(f).get("Full_Schedule", [])
@@ -134,8 +143,8 @@ if query:
                     </div>
                 """, unsafe_allow_html=True)
         else:
-            st.error("No Records Found.")
+            st.error("No Records Found. Please verify your ID.")
     else:
-        st.error("Database missing.")
-else:
-    st.markdown("<p style='text-align: center; color: #4f5b85; font-size: 10px;'>SYSTEM STATUS: ONLINE</p>", unsafe_allow_html=True)
+        st.error("Database connection error.")
+elif submit and not query:
+    st.warning("Please enter an ID first.")
