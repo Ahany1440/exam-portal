@@ -5,56 +5,68 @@ import os
 # --- Page Config ---
 st.set_page_config(page_title="Eclipse // Exam Intel", layout="centered")
 
-# --- Custom CSS for a Minimalist, High-End Interface ---
+# --- Custom CSS for Perfect Centering ---
 st.markdown("""
     <style>
-    /* Main App Background */
     .stApp { background-color: #0B0E14; }
     
-    /* Branding */
-    .header-container {
+    /* Perfect Center Header Wrapper */
+    .header-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         text-align: center;
+        width: 100%;
         margin-bottom: 40px;
+        padding-top: 20px;
     }
+
     .main-title {
         color: #3B82F6;
         font-family: 'Inter', sans-serif;
-        font-size: 38px;
+        font-size: clamp(28px, 5vw, 42px); /* Responsive font size */
         font-weight: bold;
-        margin-bottom: 10px;
-        letter-spacing: 1px;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
+
     .arabic-dua {
         color: #E5E7EB;
         font-family: 'Inter', sans-serif;
-        font-size: 18px;
+        font-size: clamp(16px, 4vw, 20px);
         font-weight: 500;
         line-height: 1.6;
         direction: rtl;
-        margin: 0 auto;
-        max-width: 80%;
-    }
-    .sub-brand {
-        color: #4f5b85;
-        font-size: 12px;
-        letter-spacing: 2px;
-        margin-top: 15px;
-        font-family: 'Inter', sans-serif;
+        margin-top: 10px;
+        max-width: 90%;
     }
 
-    /* Search Input Styling */
+    .sub-brand {
+        color: #4f5b85;
+        font-size: 11px;
+        letter-spacing: 3px;
+        margin-top: 20px;
+        text-transform: uppercase;
+    }
+
+    /* Input Box Centering */
     div[data-baseweb="input"] {
         background-color: #1C212B !important;
         border-radius: 12px !important;
         border: 1px solid #2D333F !important;
+        max-width: 500px;
+        margin: 0 auto !important;
     }
+    
     input {
         color: #E5E7EB !important;
         font-size: 16px !important;
         text-align: center !important;
     }
 
-    /* Card Styling */
+    /* Result Card Styling */
     .exam-card {
         background-color: #151921;
         padding: 25px;
@@ -67,7 +79,6 @@ st.markdown("""
         font-size: 22px;
         font-weight: bold;
         margin: 0;
-        font-family: 'Inter', sans-serif;
     }
     .room-badge {
         background-color: #1E293B;
@@ -79,35 +90,30 @@ st.markdown("""
         display: inline-block;
         margin-top: 10px;
     }
-    .details {
-        color: #9CA3AF;
-        font-size: 14px;
-        margin-top: 12px;
-        font-family: 'Inter', sans-serif;
-    }
     
-    /* System Elements */
+    /* UI Cleanup */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
-# --- Header Section (Modified for your request) ---
+# --- Updated Centered Header ---
 st.markdown("""
-    <div class="header-container">
-        <p class="main-title">EXAM SCHEDULE</p>
-        <p class="arabic-dua">اللهم إني أسألك فهم النبيين وحفظ المرسلين والملائكة المقربين</p>
-        <p class="sub-brand">SPRING 2026 FINALS // PORTAL</p>
+    <div class="header-wrapper">
+        <div class="main-title">Exam Schedule</div>
+        <div class="arabic-dua">اللهم إني أسألك فهم النبيين وحفظ المرسلين والملائكة المقربين</div>
+        <div class="sub-brand">Spring 2026 Finals // Portal</div>
     </div>
     """, unsafe_allow_html=True)
 
-# --- Centralized Search ---
+# --- Search Section ---
+# Using a container to ensure the input itself stays centered
 query = st.text_input("", placeholder="Enter Student ID", label_visibility="collapsed")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# --- Logic Section ---
+# --- Search Logic ---
 if query:
     if os.path.exists("finals2026.json"):
         with open("finals2026.json", "r") as f:
@@ -116,18 +122,20 @@ if query:
         hits = [e for e in data if query in str(e.get("Students Sets", ""))]
         
         if hits:
-            st.markdown(f"<p style='color: #3B82F6; font-weight: bold; font-family: Inter; text-align: center;'>DATA RETRIEVED FOR ID: {query}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color: #3B82F6; font-weight: bold; text-align: center;'>RESULTS FOR ID: {query}</p>", unsafe_allow_html=True)
             for exam in hits:
                 st.markdown(f"""
                     <div class="exam-card">
                         <p class="subject-title">{exam.get('Subject')}</p>
-                        <p class="details">DATE: {exam.get('Day')} &nbsp; | &nbsp; TIME: {exam.get('Time')}</p>
+                        <p style="color:#9CA3AF; font-size:14px; margin-top:10px;">
+                            DATE: {exam.get('Day')} &nbsp; | &nbsp; TIME: {exam.get('Time')}
+                        </p>
                         <span class="room-badge">ROOM {exam.get('Room')}</span>
                     </div>
                 """, unsafe_allow_html=True)
         else:
-            st.error("No Records Found. Verify ID.")
+            st.error("No Records Found.")
     else:
-        st.error("System Error: Database link broken.")
+        st.error("Database missing.")
 else:
-    st.markdown("<p style='text-align: center; color: #4f5b85; font-size: 11px; font-family: Inter;'>SYSTEM STATUS: READY</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #4f5b85; font-size: 10px;'>SYSTEM STATUS: ONLINE</p>", unsafe_allow_html=True)
